@@ -1,8 +1,7 @@
 package com.dyc.tools.dubbo.console.commands;
 
 /**
- * @author daiyuancheng
- * @date 2019/9/6
+ * @author daiyc
  */
 public class CountCommand {
 }

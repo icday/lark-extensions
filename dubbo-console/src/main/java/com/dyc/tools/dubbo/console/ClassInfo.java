@@ -1,5 +1,6 @@
 package com.dyc.tools.dubbo.console;
 
+import com.alibaba.dubbo.rpc.Invoker;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
@@ -11,7 +12,6 @@ import java.util.stream.Stream;
 
 /**
  * @author daiyc
- * @date 2019/8/27
  */
 public class ClassInfo {
     private Class<?> clazz;
@@ -25,15 +25,23 @@ public class ClassInfo {
     @Getter
     private List<MethodInfo> methods;
 
+    @Getter
+    private Invoker<?> invoker;
+
     private static Function<MethodInfo, String> MR_HIDDEN = (i) -> null;
 
     private static Function<MethodInfo, String> MR_NAME = MethodInfo::getSimpleName;
 
     private static Function<MethodInfo, String> MR_SIGNATURE = MethodInfo::getFullSignature;
 
-    private static final int DEFUALT_PADDING = 2;
+    private static final int DEFAULT_PADDING = 2;
 
-    public ClassInfo(Class<?> clazz) {
+    public ClassInfo(Invoker<?> invoker) {
+        this(invoker.getInterface());
+        this.invoker = invoker;
+    }
+
+    private ClassInfo(Class<?> clazz) {
         this.clazz = clazz;
 
         init();
@@ -55,18 +63,18 @@ public class ClassInfo {
     }
 
     public String desc() {
-        return render(MR_HIDDEN, DEFUALT_PADDING);
+        return render(MR_HIDDEN, DEFAULT_PADDING);
     }
 
     public String desc(boolean showMethod) {
         if (!showMethod) {
             return desc();
         }
-        return render(MR_NAME, DEFUALT_PADDING);
+        return render(MR_NAME, DEFAULT_PADDING);
     }
 
     public String detailedDesc() {
-        return render(MR_SIGNATURE, DEFUALT_PADDING);
+        return render(MR_SIGNATURE, DEFAULT_PADDING);
     }
 
     private String render(Function<MethodInfo, String> r, int pad) {

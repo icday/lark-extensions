@@ -6,4 +6,8 @@ package com.dyc.tools.dubbo.console;
  */
 public class Constants {
     public static final String CTX_WD = "dubbo-wd";
+
+    public static final String ROOT_PATH = "/";
+
+    public static final String EMPTY = "";
 }

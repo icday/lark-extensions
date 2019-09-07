@@ -5,11 +5,16 @@ import com.dyc.embed.console.command.PreparedCommand;
 import com.dyc.embed.console.command.Task;
 import com.dyc.tools.dubbo.console.ClassInfo;
 import com.dyc.tools.dubbo.console.Helper;
+import com.dyc.tools.dubbo.console.MethodInfo;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -31,7 +36,11 @@ public class ListCommand extends PreparedCommand {
         /**
          * 列出每个方法的签名
          */
-        METHOD_AND_SIGNATURE
+        METHOD_AND_SIGNATURE;
+
+        public static PrintMode max(PrintMode a, PrintMode b) {
+            return a.compareTo(b) > 0 ? a : b;
+        }
     }
 
     private static final String METHOD_PREFIX = "  - ";
@@ -55,24 +64,39 @@ public class ListCommand extends PreparedCommand {
     @Override
     public String doExecution(Task task, CmdContext cmdContext) {
         CommandLine commandLine = task.getCommandLine();
-
+        PrintMode mode = PrintMode.NONE;
         List<String> serviceNames = commandLine.getArgList();
         List<ClassInfo> services;
         if (serviceNames.isEmpty()) {
-            services = Helper.listAllExportedService();
+            Optional<ClassInfo> currentService = Helper.getCurrentService();
+            if (currentService.isPresent()) {
+                services = Collections.singletonList(currentService.get());
+                mode = PrintMode.METHOD;
+            } else {
+                services = Helper.listAllExportedService();
+            }
         } else {
             services = serviceNames
                     .stream()
                     .map(s -> Helper.getExportedService(s).orElse(null))
+                    .filter(Objects::nonNull)
                     .collect(Collectors.toList());
         }
 
-        PrintMode mode = detectPrintMode(commandLine);
+        mode = PrintMode.max(detectPrintMode(commandLine), mode);
 
-        List<String> ss = services.stream()
-                .map(s -> formatService(s, mode))
-                .collect(Collectors.toList());
-        return String.join("\n", ss);
+        StringBuilder sb = new StringBuilder();
+        boolean first = true;
+        for (ClassInfo service : services) {
+            if (!first) {
+                sb.append('\n');
+            } else {
+                first = false;
+            }
+            formatService(sb, service, mode, 2);
+        }
+
+        return sb.toString();
     }
 
     private PrintMode detectPrintMode(CommandLine commandLine) {
@@ -84,21 +108,19 @@ public class ListCommand extends PreparedCommand {
         return PrintMode.NONE;
     }
 
-    private String formatService(ClassInfo classInfo, PrintMode mode) {
+    private void formatService(StringBuilder sb, ClassInfo classInfo, PrintMode mode, int padding) {
         if (mode == PrintMode.NONE) {
-            return classInfo.getCanonicalName();
+            sb.append(classInfo.getCanonicalName());
+            return;
         }
-        StringBuilder sb = new StringBuilder();
         sb.append(classInfo.getCanonicalName());
-
-        List<String> methods = classInfo.getMethods().stream()
-                .map(m -> mode == PrintMode.METHOD ? m.getSimpleName() : m.getFullSignature())
-                .map(METHOD_PREFIX::concat)
-                .collect(Collectors.toList());
-        if (!methods.isEmpty()) {
-            sb.append("\n");
+        List<MethodInfo> methods = classInfo.getMethods();
+        for (int i = 0; i < methods.size(); i++) {
+            MethodInfo methodInfo = methods.get(i);
+            sb.append('\n');
+            sb.append(StringUtils.repeat(' ', padding));
+            sb.append(METHOD_PREFIX);
+            sb.append(mode == PrintMode.METHOD ? methodInfo.getSimpleName() : methodInfo.getFullSignature());
         }
-        sb.append(String.join("\n", methods));
-        return sb.toString();
     }
 }

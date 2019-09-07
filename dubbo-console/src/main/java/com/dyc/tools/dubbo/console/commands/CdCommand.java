@@ -29,7 +29,7 @@ public class CdCommand extends PreparedCommand {
         }
 
         String serviceName = argList.get(0);
-        StringUtils.strip(serviceName, " /");
+        serviceName = StringUtils.strip(serviceName, " /");
         if (StringUtils.isBlank(serviceName)) {
             Helper.resetCurrentPath();
             return "";

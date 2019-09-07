@@ -1,11 +1,15 @@
 package com.dyc.tools.dubbo.console;
 
+import com.alibaba.dubbo.rpc.Exporter;
 import com.alibaba.dubbo.rpc.protocol.dubbo.DubboProtocol;
 import com.dyc.embed.console.session.Context;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.dyc.tools.dubbo.console.Constants.ROOT_PATH;
 
 /**
  * @author daiyc
@@ -25,11 +29,18 @@ public class Helper {
      * @return Interfaces
      */
     public static List<ClassInfo> listAllExportedService() {
-        return DubboProtocol.getDubboProtocol().getExporters().stream().map(e -> e.getInvoker().getInterface())
+        return DubboProtocol.getDubboProtocol().getExporters().stream().map(Exporter::getInvoker)
                 .map(ClassInfo::new).collect(Collectors.toList());
     }
 
+    public static Optional<ClassInfo> getCurrentService() {
+        return getExportedService(getCurrentPath());
+    }
+
     public static Optional<ClassInfo> getExportedService(String serviceName) {
+        if (StringUtils.isBlank(serviceName)) {
+            return Optional.empty();
+        }
         return listAllExportedService()
                 .stream()
                 .filter(c -> c.getCanonicalName().equals(serviceName) || c.getCanonicalName().endsWith(serviceName))
@@ -37,7 +48,7 @@ public class Helper {
     }
 
     public static String getCurrentPath() {
-        return Context.getValue(Constants.CTX_WD, "/");
+        return Context.getValue(Constants.CTX_WD, ROOT_PATH);
     }
 
     public static void setCurrentPath(String path) {
