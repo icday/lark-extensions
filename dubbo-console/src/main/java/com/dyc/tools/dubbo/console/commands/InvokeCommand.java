@@ -3,6 +3,8 @@ package com.dyc.tools.dubbo.console.commands;
 import com.alibaba.dubbo.common.utils.PojoUtils;
 import com.alibaba.dubbo.rpc.RpcInvocation;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializeConfig;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.dyc.embed.console.command.CmdContext;
 import com.dyc.embed.console.command.RawCommand;
 import com.dyc.embed.console.complete.ArgCompleter;
@@ -22,6 +24,8 @@ import java.util.stream.Collectors;
  */
 @SuppressWarnings("all")
 public class InvokeCommand extends RawCommand {
+    private static SerializeConfig prettyConfig = new SerializeConfig();
+
     public InvokeCommand() {
         super("invoke", "Invoke a Dubbo service");
     }
@@ -67,7 +71,7 @@ public class InvokeCommand extends RawCommand {
             throw new RuntimeException(String.format("Failed to invoke method %s, cause: %s", method.getSimpleName(), com.alibaba.dubbo.common.utils.StringUtils.toString(throwable)));
         }
         long end = System.currentTimeMillis();
-        sb.append(JSON.toJSONString(result));
+        sb.append(JSON.toJSONString(result, SerializerFeature.PrettyFormat));
         sb.append("\r\nelapsed: ");
         sb.append(end - start);
         sb.append(" ms.");
