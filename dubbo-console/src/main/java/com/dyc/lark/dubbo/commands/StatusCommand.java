@@ -1,4 +1,4 @@
-package com.dyc.tools.dubbo.console.commands;
+package com.dyc.lark.dubbo.commands;
 
 /**
  * @author daiyc

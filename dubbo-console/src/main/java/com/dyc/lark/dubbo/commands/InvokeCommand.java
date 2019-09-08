@@ -1,17 +1,17 @@
-package com.dyc.tools.dubbo.console.commands;
+package com.dyc.lark.dubbo.commands;
 
 import com.alibaba.dubbo.common.utils.PojoUtils;
 import com.alibaba.dubbo.rpc.RpcInvocation;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.dyc.embed.console.command.CmdContext;
-import com.dyc.embed.console.command.RawCommand;
-import com.dyc.embed.console.complete.ArgCompleter;
-import com.dyc.embed.console.complete.DefaultSingleArgCompleter;
-import com.dyc.tools.dubbo.console.ClassInfo;
-import com.dyc.tools.dubbo.console.Helper;
-import com.dyc.tools.dubbo.console.MethodInfo;
+import com.dyc.lark.core.command.CmdContext;
+import com.dyc.lark.core.command.RawCommand;
+import com.dyc.lark.core.complete.ArgCompleter;
+import com.dyc.lark.core.complete.DefaultSingleArgCompleter;
+import com.dyc.lark.dubbo.ClassInfo;
+import com.dyc.lark.dubbo.Helper;
+import com.dyc.lark.dubbo.MethodInfo;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 

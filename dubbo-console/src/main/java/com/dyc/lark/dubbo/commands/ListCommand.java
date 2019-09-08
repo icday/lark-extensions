@@ -1,11 +1,11 @@
-package com.dyc.tools.dubbo.console.commands;
+package com.dyc.lark.dubbo.commands;
 
-import com.dyc.embed.console.command.CmdContext;
-import com.dyc.embed.console.command.PreparedCommand;
-import com.dyc.embed.console.command.Task;
-import com.dyc.tools.dubbo.console.ClassInfo;
-import com.dyc.tools.dubbo.console.Helper;
-import com.dyc.tools.dubbo.console.MethodInfo;
+import com.dyc.lark.core.command.CmdContext;
+import com.dyc.lark.core.command.PreparedCommand;
+import com.dyc.lark.core.command.Task;
+import com.dyc.lark.dubbo.ClassInfo;
+import com.dyc.lark.dubbo.Helper;
+import com.dyc.lark.dubbo.MethodInfo;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;

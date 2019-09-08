@@ -1,4 +1,4 @@
-package com.dyc.tools.dubbo.console;
+package com.dyc.lark.dubbo;
 
 import com.alibaba.dubbo.common.utils.ReflectUtils;
 import lombok.Getter;

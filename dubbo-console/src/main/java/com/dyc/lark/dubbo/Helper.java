@@ -1,15 +1,13 @@
-package com.dyc.tools.dubbo.console;
+package com.dyc.lark.dubbo;
 
 import com.alibaba.dubbo.rpc.Exporter;
 import com.alibaba.dubbo.rpc.protocol.dubbo.DubboProtocol;
-import com.dyc.embed.console.session.Context;
+import com.dyc.lark.core.session.Context;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static com.dyc.tools.dubbo.console.Constants.ROOT_PATH;
 
 /**
  * @author daiyc
@@ -48,7 +46,7 @@ public class Helper {
     }
 
     public static String getCurrentPath() {
-        return Context.getValue(Constants.CTX_WD, ROOT_PATH);
+        return Context.getValue(Constants.CTX_WD, Constants.ROOT_PATH);
     }
 
     public static void setCurrentPath(String path) {
