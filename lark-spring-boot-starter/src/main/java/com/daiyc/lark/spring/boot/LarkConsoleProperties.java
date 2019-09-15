@@ -7,10 +7,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author daiyc
  * @date 2019/9/14
  */
-@ConfigurationProperties(prefix = "lark.server")
+@ConfigurationProperties(prefix = "lark.console")
 @Data
-public class LarkServerProperties {
-    private String host;
-
-    private int port;
+public class LarkConsoleProperties {
+    private String prompt;
 }

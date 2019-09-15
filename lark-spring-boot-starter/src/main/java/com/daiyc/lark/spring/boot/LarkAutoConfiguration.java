@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author daiyuancheng
+ * @author daiyc
  * @date 2019/9/14
  */
 @Configuration
@@ -20,9 +20,15 @@ public class LarkAutoConfiguration {
     }
 
     @Bean
+    public LarkConsoleProperties larkConsoleProperties() {
+        return new LarkConsoleProperties();
+    }
+
+    @Bean
     public LarkServerBean larkServerBean() {
-        LarkServerProperties properties = larkServerProperties();
-        return new LarkServerBean(properties.getHost(), properties.getPort(), properties.getPrompt());
+        LarkServerProperties serverProperties = larkServerProperties();
+        LarkConsoleProperties consoleProperties = larkConsoleProperties();
+        return new LarkServerBean(serverProperties.getHost(), serverProperties.getPort(), consoleProperties.getPrompt());
     }
 
     @Bean
